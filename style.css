@@ -1,0 +1,77 @@
+*:focus {
+outline:none;
+}
+
+*:hover {
+text-decoration:none;
+}
+
+.row {
+    margin: 1rem 0;
+}
+
+.text {
+    border: 0.5px solid gray;
+    padding: 0.5rem;
+    border-radius: 1rem;
+}
+
+.myinput[type="checkbox"]:checked:after {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAQAAABuW59YAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAIGNIUk0AAHolAACAgwAA+f8AAIDpAAB1MAAA6mAAADqYAAAXb5JfxUYAAAB2SURBVHjaAGkAlv8A3QDyAP0A/QD+Dam3W+kCAAD8APYAAgTVZaZCGwwA5wr0AvcA+Dh+7UX/x24AqK3Wg/8nt6w4/5q71wAAVP9g/7rTXf9n/+9N+AAAtpJa/zf/S//DhP8H/wAA4gzWj2P4lsf0JP0A/wADAHB0Ngka6UmKAAAAAElFTkSuQmCC'), linear-gradient(135deg, #B1B6BE 0%, #FFF 100%);
+}
+
+.myinput.large {
+    height: 22px;
+    width: 22px;
+}
+
+.myinput.large[type="checkbox"]:before {
+    width: 20px;
+    height: 20px;
+}
+
+.myinput.large[type="checkbox"]:after {
+    top: -20px;
+    width: 16px;
+    height: 16px;
+}
+
+.task-finished {
+    color: white;
+    font-weight: 600;
+    background: blue;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: .3rem;
+    border-radius: 0.5rem;
+}
+
+.delete-btn{
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    position: relative;
+    right: 7px;
+    top: 7px;
+}
+/*
+.delete-btn input[type=checkbox]{
+    -ms-transform: scale(1.3); 
+    -moz-transform: scale(1.3); 
+    -webkit-transform: scale(1.3); 
+    -o-transform: scale(1.3); 
+    transform: scale(1.3);
+}
+*/
+.delete{
+    width: 20px;
+    height: 20px;
+    transition: 2sec ease-in-out;
+    background: url("https://img.icons8.com/nolan/20/000000/multiply.png");
+    border: none;
+}
+
+.delete:hover{
+    transform: scale(1.3);
+}
