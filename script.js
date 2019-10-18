@@ -82,6 +82,8 @@ var toDo = {
         let fullDate;
         if (month < 10) month = '0' + month;
         if (day < 10) day = '0' + day;
+        if (hours < 10) hours = '0' + hours;
+        if (minutes < 10) minutes = '0' + minutes;
         var newDate = fullDate => fullDate = hours + ":" + minutes + "&nbsp;&nbsp;&nbsp;" + day + "/" + month + "/" + year;
         return newDate(fullDate);
     },
