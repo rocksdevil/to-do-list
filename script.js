@@ -3,28 +3,28 @@ var toDo = {
     start: function () { // start function
         let info = toDo.getToDo();
         if (info !== "") {
-            let taskNum = toDo.counter();
-            toDo.structureTab(taskNum, info);
+            let taskId = toDo.counter();
+            toDo.structureTab(taskId, info);
         } else {
-            alert("Task can not be empty");
+            alert("Task cannot be empty");
         }
     },
-    
+
     // get data from input
-    getToDo: function () { 
+    getToDo: function () {
         let data;
         var getData = data => data = $("#todo-input").val();
         return getData(data);
     },
-    
+
     base: 0, // base num to counter of tasks
-    
+
     // couter
     counter: function () {
         var task_id = this.base++;
         return task_id;
     },
-    
+
     // clear input file from used data
     clearInput: function () {
         let data;
@@ -34,41 +34,97 @@ var toDo = {
 
     // delete task
     deleteInput: function (num) {
-        let last = num.length - 1;
-        if (confirm('Are you sure that you want to delete it')) {
-            $("#box" + num.charAt(last)).remove();
+        let number = toDo.taskNum(num);
+        if (confirm('Are you sure you want to delete task')) {
+            $("#box" + number).remove();
         }
     },
 
-    // mark task as done or not
-    markTask: function (name) {
-        let last = name.length - 1;
-        if ($("input[name='" + name + "']").is(":checked")) {
-            $("#box" + name.charAt(last)).css("background-color", "lightgrey");
-        } else
-            $("#box" + name.charAt(last)).css("background-color", "");
+    //get taskNumber
+    taskNum: function (infromation) {
+        let last = infromation.length - 1;
+        return infromation.charAt(last);
     },
-    
+
+    markTask: function (name) {
+        let number = toDo.taskNum(name);
+        if (!$("#box" + number).hasClass("end")) {
+            $(".confirm-text" + number).text("finished");
+            $("#box" + number).addClass("end");
+        } else {
+            $(".confirm-text" + number).text("unfinished");
+            $("#box" + number).removeClass("end");
+        }
+    },
+
     // show checked inputs
     checkAtr: function (flow) {
         var input = $(flow).attr('name');
-        let last = input.length - 1;
-        $("#box" + input.charAt(last)).css("display", "none");
+        let number = toDo.taskNum(input);
+        $("#box" + number).css("display", "none");
     },
 
     // show unchecked inputs
     uncheckAtr: function (inflow) {
         var input = $(inflow).attr('name');
-        let last = input.length - 1;
-        $("#box" + input.charAt(last)).css("display", "block");
+        let number = toDo.taskNum(input);
+        $("#box" + number).css("display", "block");
     },
 
-    // sort of inputs by checkbox param
+    //get actuall date
+    cdate: function () {
+        let currnetDate = new Date();
+        let month = currnetDate.getMonth();
+        let year = currnetDate.getFullYear();
+        let day = currnetDate.getDay();
+        let hours = currnetDate.getHours();
+        let minutes = currnetDate.getMinutes();
+        let fullDate;
+        if (month < 10) month = '0' + month;
+        if (day < 10) day = '0' + day;
+        var newDate = fullDate => fullDate = hours + ":" + minutes + "&nbsp;&nbsp;&nbsp;" + day + "/" + month + "/" + year;
+        return newDate(fullDate);
+    },
+
+    //start edit input
+    editInput: function (name) {
+        let number = toDo.taskNum(name);
+        try {
+            if (!($(".area" + number).hasClass("editing"))) {
+                let content = $(".text" + number).text();
+                $(".area" + number).addClass("editing");
+                $(".area" + number).css("display", "block");
+                $("#confirm" + number).css("display", "block");
+                $(".area" + number).val(content);
+                $(".text" + number).css("display", "none");
+            } else {
+                $(".text" + number).css("display", "block");
+                $(".area" + number).css("display", "none");
+                $("#confirm" + number).css("display", "none");
+                $(".area" + number).removeClass("editing");
+            }
+        } catch (err) {
+            console.log(err.message);
+        }
+    },
+
+    //finish edit input
+    endEdit: function (name) {
+        let number = toDo.taskNum(name);
+        $(".text" + number).css("display", "block");
+        let content = $(".area" + number).val();
+        $(".text" + number).text(content);
+        $(".area" + number).css("display", "none");
+        $("#confirm" + number).css("display", "none");
+        $(".area" + number).removeClass("editing");
+    },
+
+    // sort inputs by checkbox param
     sortToDo: function (param) {
         switch (param) {
             case "finished":
-                $("input[type=checkbox]").each(function () {
-                    if (!$(this).is(':checked')) {
+                $(".status").each(function () {
+                    if (!$(this).hasClass("end")) {
                         toDo.checkAtr(this);
                     } else {
                         toDo.uncheckAtr(this);
@@ -77,8 +133,8 @@ var toDo = {
                 break;
 
             case "notFinished":
-                $("input[type=checkbox]").each(function () {
-                    if ($(this).is(':checked')) {
+                $(".status").each(function () {
+                    if ($(this).hasClass("end")) {
                         toDo.checkAtr(this);
                     } else {
                         toDo.uncheckAtr(this);
@@ -87,7 +143,7 @@ var toDo = {
                 break;
 
             default:
-                $("input[type=checkbox]").each(function () {
+                $(".status").each(function () {
                     toDo.uncheckAtr(this);
                 });
         }
@@ -96,28 +152,40 @@ var toDo = {
     // structure of task
     structureTab: function (itemId, content) {
         let object;
+        let setDate = toDo.cdate();
         var structure = object =>
-            object = `<div class="panel panel-default add-todo-panel" id="box` + itemId + `">
-                            <div class="delete-btn">
-                                <input class="delete" type="button" id="btn` + itemId + `" onclick="toDo.deleteInput(this.id)" />
-                            </div>
-                            <div class="panel-body">
-                                <div class="row">
-                                    <div class="col-sm-10">
-                                        <div class="text">
-                                            ` + content + `
-                                        </div>
+            object = `<div id="todo-list-root">
+                            <div class="panel panel-default add-todo-panel status" name="status` + itemId + `" id="box` + itemId + `">
+                                <div class="panel-heading">
+                                    <div class="todo-title">` + content + `</div>
+                                    <div class="todo-icons">
+                                        <a class="edit" name="edit` + itemId + `" type="button" id="btn" onclick="toDo.editInput(this.name)">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a class="finished" name="task` + itemId + `" type="button" id="btn" onclick="toDo.markTask(this.name)">
+                                            <i class="far fa-check-circle"></i>
+                                        </a>
+                                        <a class="delete" type="button" id="btn` + itemId + `" onclick="toDo.deleteInput(this.id)">
+                                            <i class="fas fa-trash">&nbsp;</i>
+                                        </a>
                                     </div>
-                                    <div class="col-sm-2 finished-box">
-                                        <div class="col task-finished">
-                                            Finished
-                                            <input type="checkbox" name="task` + itemId + `" id="todo-btn" class="myinput large" onclick="toDo.markTask(this.name)"/>
-                                        </div>
+                                </div>
+                                <div class="panel-body column">
+                                    <div class="col-sm-11 text` + itemId + `">` + content + `</div>
+                                    <textarea class="col-sm-11 area` + itemId + `"></textarea>
+                                        <input type="submit" id="confirm` + itemId + `" class="confirm" onclick="toDo.endEdit(this.id)" />
+                                    <div class="row col-sm-12">
+                                        <div class="col-sm-6"></div>
+                                        <div class="col-sm-3 textEdit confirm-text` + itemId + `">unfinished</div>
+                                        <div class="col-sm-3 current-date">` + setDate + `</div>
                                     </div>
                                 </div>
                             </div>
-                        </div>`;
+                        </div>
+                    </div>`;
         $("#todo-list-root").append(structure(object));
+        $(".area" + itemId).css("display", "none");
+        $("#confirm" + itemId).css("display", "none");
         toDo.clearInput();
     },
 }
