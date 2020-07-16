@@ -1,25 +1,41 @@
-function setCookie(key, value, expiry) {
-    var expires = new Date();
-    expires.setTime(expires.getTime() + (expiry * 24 * 60 * 60 * 1000));
-    document.cookie = key + '=' + value + ';expires=' + expires.toUTCString();
+// function setCookie(key, value, expiry) {
+//     let values = Object.assign({}, value);
+//     var expires = new Date();
+//     expires.setTime(expires.getTime() + (expiry * 24 * 60 * 60 * 1000));
+//     document.cookie = key + '=' + value + ';expires=' + expires.toUTCString();
+// } 
+
+function setCookie(name, value) {
+    var cookie = [name, '=', JSON.stringify(value), '; domain=.', window.location.host.toString(), '; path=/;'].join('');
+    document.cookie = cookie;
 }
 
-function getCookie(key) {
-    var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
-    return keyValue ? keyValue[2] : null;
+function getCookie(name) {
+    var result = document.cookie.match(new RegExp(name + '=([^;]+)'));
+    result && (result = JSON.parse(result[1]));
+    return result;
 }
 
-function eraseCookie(key) {
-    var keyValue = getCookie(key);
-    setCookie(key, keyValue, '-1');
-}
+// function getCookie(key) {
+//     // var keyValue = document.cookie.match('(^|;) ?' + key + '=([^;]*)(;|$)');
+//    // return keyValue ? keyValue[2] : null;
+//     return unescape(document.cookie);
+// }
+
+//remove cookie
+// function eraseCookie(key) {
+//     var keyValue = getCookie(key);
+//     setCookie(key, keyValue, '-1');
+// }
 
 function cookieElements() {
   let elements = document.getElementById("todo-list-root").childNodes;
-  setCookie("task-list", elements, 30);
-  let match = getCookie();
+  setCookie("task-list", elements);
+  let match = getCookie("task-list");
   console.log(match);
 }
+
+//---------------OLD CODE----------------------//
 
 // //set cookies
 // function setCookie(cname, cvalue, exdays) {
@@ -52,13 +68,11 @@ function cookieElements() {
 //     if (usercookie === "") {
 //         setCookie("task-list", "", 30);
 //     } else {
-//         //document.getElementById("todo-list-root").innerHTML = usercookie;
-//         console.log();
+//         document.getElementById("todo-list-root").innerHTML = usercookie;
 //     }
 // }
 
 // function cookieElements(){
 //     let elements = document.getElementById("todo-list-root").childNodes;
 //     setCookie("task-list", elements, 30);
-//     checkCookie();
 // }
