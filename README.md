@@ -1,5 +1,6 @@
 # To do list
-To do list version 1.0.3 beta this means this version doesn't have cookies support for saving stage.
+To do list version 1.0.3
+This version doesn't have cookies support for saving stage.
 
 ## Technology
     - HTML
