@@ -17,13 +17,13 @@ const cookies = {
     return result;
   },
 
-  saveTodos: function(tasks) {
+  saveTodos: function (tasks) {
     window.localStorage.setItem("tasks", JSON.stringify(tasks));
     this.showTodos();
-},
+  },
 
   loadTodos: function () {
-    return JSON.parse(window.localStorage.getItem("task-list")) || []
+    return JSON.parse(window.localStorage.getItem("task-list")) || [];
   },
 
   showTodos: () => {
@@ -36,7 +36,6 @@ const cookies = {
                 <i class="fa fa-trash delete"></i>
             </li>
         `;
-    })
-
-}
+    });
+  },
 };
